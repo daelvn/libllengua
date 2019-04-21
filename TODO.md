@@ -1,7 +1,6 @@
 # TODO
 - IPA guessing
 - X-SAMPA to IPA
-- Database linking using triggers.
 - Filtering functions for dictionary and namebase.
 - Grammar. The whole of it.
 - LLRE.
@@ -9,4 +8,4 @@
 - Several tools as seen in CWS.
 - Journaling and manuals.
 - Meta information. Somehow kept in the database file.
-- Croissant/lcurses frontend.
+- Sirocco/lcurses frontend.

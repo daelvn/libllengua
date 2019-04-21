@@ -3,8 +3,11 @@
 -- By daelvn
 -- 12.04.2019
 import runSeveralOn, fileExists from require "libllengua.util"
+import schema, maps, mapf       from require "libllengua.db.schemas"
+import insertInto               from require "libllengua.db.table"
+import LLENGUA_DB_VERSION       from require "libllengua.config"
+import mapMetadata              from mapf
 clutch = require "clutch"
-
 
 --> # General structure
 --> This paragraph describes the general structure of the llengua language storage system.
@@ -27,22 +30,20 @@ clutch = require "clutch"
 --> ### Literature
 --> Keep track of journals and other pieces of literature.
 
+--> # getDatabaseVersion
+--> Returns the database version.
+getDatabaseVersion = (db) -> (db\queryone "SELECT value FROM ll_metadata WHERE key='db_version'").value
+
 --> # Language
 --> Creates a new Language object.
 Language = (name, autonym, code="#{string.lower name\sub 1,2}_#{string.upper autonym\sub 1,2}") ->
   db           = clutch.open "#{code}.llengua.db"
   unless fileExists "#{code}.llengua.db"
-    print "File #{code}.llengua.db does not exist!"
     initLanguage = runSeveralOn db
-    initLanguage {
-      "CREATE TABLE phonetic_inventory(sound TEXT, quality TEXT, allophone TEXT, loan NUMERIC, blend NUMERIC)"
-      "CREATE TABLE phonetic_categories(category UNIQUE TEXT, letters TEXT)"
-      "CREATE TABLE ortographic_inventory(sound TEXT, grapheme TEXT, name TEXT, upper TEXT, variant TEXT)"
-      "CREATE TABLE grammar_declinations(pos TEXT, targets TEXT)"
-      "CREATE TABLE dictionary(word TEXT, definition TEXT, pronunciation TEXT, source TEXT, class TEXT, etymology TEXT, notes TEXT)"
-      "CREATE TABLE translations(id INTEGER PRIMARY KEY, original_code TEXT, original_text TEXT, text TEXT)"
-      "CREATE TABLE namebase(name TEXT, type TEXT, gender TEXT, notes TEXT)"
-    }
+    initLanguage schema
+    db\update insertInto "ll_metadata", mapMetadata key: "'db_version'", "'#{LLENGUA_DB_VERSION}'"
+  else
+    error "Database version mismatch. Expected #{LLENGUA_DB_VERSION}, got #{getDatabaseVersion db}" unless (getDatabaseVersion db) == LLENGUA_DB_VERSION
   { :name, :autonym, :code, :db }
 
 --> # queryLanguage
@@ -56,4 +57,4 @@ queryLanguage = (lang) ->
 finalizeLanguage = (lang) ->
   lang.db\close!
 
-{ :Language, :queryLanguage, :finalizeLanguage }
+{ :Language, :queryLanguage, :finalizeLanguage, :getDatabaseVersion }
