@@ -61,6 +61,6 @@ transformOld = (name) ->
 
 --> # reverse
 --> Reverses a table.
-reverse = (t) -> return for i=#t,1 do t[i]
+reverse = (t) -> return for i=#t,1,-1 do t[i]
 
 { :fileExists, :isIn, :getSingleKey, :unpackFn, :flatJoinRight, :isIn, :transformOld, :reverse }

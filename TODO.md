@@ -1,11 +1,11 @@
 # TODO
 - IPA guessing
 - X-SAMPA to IPA
-- Filtering functions for dictionary and namebase.
 - Grammar. The whole of it.
 - LLRE.
+  - Reverse order of condition checking (exception first).
+  - Fix insertBack.
 - Word generation.
 - Several tools as seen in CWS.
 - Journaling and manuals.
-- Meta information. Somehow kept in the database file.
 - Sirocco/lcurses frontend.
