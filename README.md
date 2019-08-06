@@ -41,4 +41,4 @@ Handling of phonetic categories for use in tools like the LLRE (LLengua Rewritin
 Sound part of the inventory.
 
 ## License
-MIT
+Public domain.
